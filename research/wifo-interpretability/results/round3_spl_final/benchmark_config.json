@@ -1,0 +1,37 @@
+{
+  "device": "NVIDIA GeForce RTX 5060 Ti",
+  "driver": "610.88",
+  "torch": "2.14.0+cu130",
+  "cuda": "13.0",
+  "precision": "FP32 with TF32 disabled",
+  "timed_samples": 50,
+  "warmup": 30,
+  "shape": [
+    16,
+    32,
+    32
+  ],
+  "timing": "synchronized wall clock from GPU-resident visible CSI to token predictions",
+  "order": "All three models are resident during timing. Each round randomly permutes their order, seed 93278.",
+  "gflops": "2 FLOPs per MAC for linear, patch Conv3d, QK and AV matmul",
+  "memory": "CUDA peak allocated memory including one model, its input and forward intermediates",
+  "persistent_cuda_workspace_mib": 32.0,
+  "indices": [
+    1,
+    5,
+    17,
+    28,
+    29,
+    50,
+    55,
+    56,
+    63,
+    75,
+    81,
+    82,
+    87,
+    97,
+    106,
+    113
+  ]
+}

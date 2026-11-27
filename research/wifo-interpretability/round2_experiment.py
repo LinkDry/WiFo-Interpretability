@@ -70,16 +70,20 @@ def tv_distance(first, second, queries):
     return .5 * (first[:, :, queries] - second[:, :, queries]).abs().sum(-1).mean(-1)
 
 
-def swap_specs(recipient, donor):
+def swap_specs(recipient, donor, heads=AV_HEADS):
     return [(head, (recipient if mode == 0 else donor)[0][:, head],
                    (recipient if mode == 0 else donor)[1][:, head])
-            for head in AV_HEADS for mode in range(len(AV_CONDITIONS))]
+            for head in heads for mode in range(len(AV_CONDITIONS))]
 
 
 @torch.inference_mode()
 def run_av_profile(probe, source, batch):
     channel = TappedChannel(*(source[key] for key in ('path_gains', 'steering', 'doppler_relative', 'delay_relative', 'path_power')))
-    csi = channel.render()
+    return run_av_csi(probe, channel.render(), batch)
+
+
+@torch.inference_mode()
+def run_av_csi(probe, csi, batch, heads=AV_HEADS):
     grid = Grid((16, 32, 32))
     task_errors, task_drift, task_base = [], [], []
     max_identity_diff = 0.0
@@ -104,17 +108,17 @@ def run_av_profile(probe, source, batch):
                 cell_errors, cell_drift = [], []
                 for cell in range(4):
                     original, alternative = captured[cell], captured[cell ^ axis]
-                    specs = swap_specs(original, alternative)
+                    specs = swap_specs(original, alternative, heads)
                     size = len(received[cell])
                     with av_site(probe, batch_swaps=specs):
                         returned = probe.error(received[cell].repeat(len(specs), 1, 1, 1, 1),
                                                targets[cell].repeat(len(specs), 1, 1), task)
-                    returned = returned.reshape(len(AV_HEADS), len(AV_CONDITIONS), size)
+                    returned = returned.reshape(len(heads), len(AV_CONDITIONS), size)
                     control = baselines[cell].expand_as(returned[:, 0])
                     torch.testing.assert_close(returned[:, 0], control, **TOL)
                     max_identity_diff = max(max_identity_diff, (returned[:, 0] - control).abs().max().item())
                     cell_errors.append(returned.cpu().numpy())
-                    drift_heads = tv_distance(original[0][:, AV_HEADS], alternative[0][:, AV_HEADS], mask)
+                    drift_heads = tv_distance(original[0][:, heads], alternative[0][:, heads], mask)
                     cell_drift.append(drift_heads.T.cpu().numpy())
                 batch_errors.append(np.stack(cell_errors))
                 batch_drift.append(np.stack(cell_drift))
@@ -124,7 +128,7 @@ def run_av_profile(probe, source, batch):
         task_drift.append(np.concatenate(drift, axis=-1))
         task_base.append(np.concatenate(bases, axis=-1))
     return dict(errors=np.stack(task_errors), drift=np.stack(task_drift), baseline=np.stack(task_base),
-                heads=AV_HEADS, identity_max_abs_nmse_diff=max_identity_diff)
+                heads=heads, identity_max_abs_nmse_diff=max_identity_diff)
 
 
 def run_av(args, probe, config):

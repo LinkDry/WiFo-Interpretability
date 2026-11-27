@@ -22,3 +22,12 @@
 - 交付：验证两项实验、测试、四份 CSV、诊断图和判决报告。预算、干预和 bootstrap 定义写入报告。
 
 Round 2 已完成。验证预算 0.2 dB 锁定 16 个时域头和 23 个频域头。盲测 Task-Aware 最坏域退化分别为 0.262 和 0.147 dB。
+
+## Round 3 — SPL
+
+1. 构造以 Round 2 Global Taylor 排名的前 16／23 个头为固定移除名单的物理子模型。先验证逐元素输出，复用 Round 2 D17/D18 样本检查双任务 NMSE。
+2. 在 5060 Ti 以 D17 张量和同一前向路径测时延、设备峰值分配、推理 GFLOPs 和参数。使用墙钟与 CUDA 同步计时，保存 50 次记录和环境。
+3. 用 MATLAB QuaDRiGa `NR-CDL-C` 生成独立配对多径。保留路径结构，验证输入参数与未改变轴的配对。复用 Round 2 A/V 干预及配对统计。
+4. 生成三张双栏矢量 PDF 和 300 DPI PNG，渲染检查后生成 ROUND3_REPORT.md。
+
+Round 3 已完成。16 头静态档盲测覆盖双任务；CDL-C 复现 H2 的 Value 效应与 H3 的频域 Value 轴偏好。报告、原始数据、3 张 PDF 和 300 DPI PNG 均已核验。

@@ -1,0 +1,36 @@
+{
+  "peak_doppler_hz": [
+    40,
+    140
+  ],
+  "rms_delay_ns": [
+    50,
+    200
+  ],
+  "fc": 3500000000.0,
+  "velocity": [
+    3.42619952,
+    11.99169832
+  ],
+  "spacing_hz": 180000,
+  "snapshot_s": 0.0005,
+  "matlab_version": "9.12.0.1884302 (R2022a)",
+  "quadriga_version": "2.8.1-0",
+  "n_pairs": 128,
+  "identity_max_abs_nmse_diff": 2.384185791015625e-07,
+  "baseline_nmse_db_by_task_and_cell": [
+    [
+      -5.12484073638916,
+      -4.636194705963135,
+      -10.886213302612305,
+      -5.367059707641602
+    ],
+    [
+      -2.7256312370300293,
+      -9.226156234741211,
+      -3.1925010681152344,
+      -4.779936790466309
+    ]
+  ],
+  "channel": "QuaDRiGa NR-CDL-C. Doppler control is nominal maximum v*fc/c. Delay control is power-weighted nominal PDP RMS."
+}
