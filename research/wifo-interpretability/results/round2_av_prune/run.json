@@ -1,0 +1,70 @@
+{
+  "base_pilot": {
+    "experiment": "WiFo Base exact ablations and paired 2x2 controlled multipath",
+    "checkpoint_sha256": "5681e6dfbe3ebd358b01510f476b18a25a6616dcb5b88a31595b288aeba22fce",
+    "source_commit": "a0889e124aeb9dcc423fc37e6796f77c7c4f7f24",
+    "device": "cuda:0",
+    "gpu": "NVIDIA GeForce RTX 5060 Ti",
+    "torch": "2.14.0+cu130",
+    "numpy": "2.4.6",
+    "tasks": [
+      "temporal",
+      "fre"
+    ],
+    "samples_per_split": 160,
+    "samples_per_profile": 128,
+    "batch": 16,
+    "variant_chunk": 8,
+    "physics_batch": 8,
+    "physics_seeds": {
+      "diffuse": 861,
+      "clustered": 2381
+    },
+    "axis_order": "N,C,T,A,F",
+    "snr_db": 20,
+    "mask_fraction": 0.5,
+    "target": "clean masked CSI",
+    "physics_factors_hz_ns": [
+      [
+        40.0,
+        50.0
+      ],
+      [
+        140.0,
+        50.0
+      ],
+      [
+        40.0,
+        200.0
+      ],
+      [
+        140.0,
+        200.0
+      ]
+    ]
+  },
+  "round2_torch": "2.14.0+cu130",
+  "round2_numpy": "2.4.6",
+  "av_heads": [
+    1,
+    2,
+    3,
+    5,
+    8
+  ],
+  "av_conditions": [
+    "Identity",
+    "A-only",
+    "V-only",
+    "A+V"
+  ],
+  "factors": [
+    "doppler",
+    "delay"
+  ],
+  "prune_variant_chunk": 8,
+  "seeds_for_blind_sampling": [
+    26848,
+    26849
+  ]
+}
